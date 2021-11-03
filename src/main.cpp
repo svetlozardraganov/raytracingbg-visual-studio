@@ -38,12 +38,13 @@ vector<Shader*> shaders;
 vector<Node*> nodes;
 
 
+
 Color raytrace(Ray ray)
 {
 	IntersectionData data;
-	for (int i = 0; i < (int)geometries.size(); i++)
-		if (geometries[i]->intersect(ray, data))
-			return Color(1, 0, 0);
+	for (int i = 0; i < (int)nodes.size(); i++)
+		if (nodes[i]->geom->intersect(ray, data))
+			return nodes[i]->shader->shade(ray, data);
 
 	//
 	return Color(0, 0, 0);
@@ -73,9 +74,18 @@ void initializeScene(void)
 
 	camera->beginFrame();
 
+	lightPos = Vector(0, 300, 750);
+	lightColor = Color(1, 1, 1);
+	lightPower = 80000;
+
 	Plane* plane = new Plane(2);
 	geometries.push_back(plane);
 
+	CheckerShader* checker = new CheckerShader(Color(1, 0, 0), Color(0, 0, 1), 50);
+	Node* floor = new Node(plane, checker);
+
+	shaders.push_back(checker);
+	nodes.push_back(floor);
 }
 
 //void initializeScene(void)

@@ -25,6 +25,7 @@ Color lightColor;
 float lightPower;
 
 
+
 Shader::Shader(const Color& color)
 {
 	this->color = color;

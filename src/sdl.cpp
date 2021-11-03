@@ -37,14 +37,15 @@ bool initGraphics(int frameWidth, int frameHeight)
 		return false;
 	}
 	//screen = SDL_SetVideoMode(frameWidth, frameHeight, 32, 0);
-//	screen = SDL_CreateWindow("My VFB Window",
-//                                SDL_WINDOWPOS_UNDEFINED,
-//                                SDL_WINDOWPOS_UNDEFINED,
-//                                frameWidth, frameHeight,
-//                                SDL_WINDOW_SHOWN | SDL_WINDOW_OPENGL);
+	//screen = SDL_CreateWindow("My VFB Window",
+ //                               SDL_WINDOWPOS_UNDEFINED,
+ //                               SDL_WINDOWPOS_UNDEFINED,
+ //                               frameWidth, frameHeight,
+ //                               SDL_WINDOW_SHOWN | SDL_WINDOW_OPENGL);
 
-
+	
     SDL_CreateWindowAndRenderer(frameWidth, frameHeight, SDL_WINDOW_SHOWN, &screen, &renderer );
+	SDL_SetWindowTitle(screen, "My VFB");
 
 
 
@@ -90,6 +91,7 @@ void displayVFBB(Color vfb[VFB_MAX_SIZE][VFB_MAX_SIZE])
 			//cout << vfb[y][x].r << vfb[y][x].g << vfb[y][x].b << endl;
             //set the color of the pixel. The color is first converted to 0..1 range, and then multiplied to 255 to convert it to 0..255 range
             SDL_SetRenderDrawColor(renderer, vfb[y][x].r*255, vfb[y][x].g*255, vfb[y][x].b*255, 255);
+
             //draw the pixel over the window/screen
             SDL_RenderDrawPoint(renderer, x, y);
 
