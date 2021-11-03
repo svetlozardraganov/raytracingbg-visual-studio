@@ -24,7 +24,7 @@
 using namespace std;
 
 
-//SDL_Surface* screen = NULL;
+//SDL_Surface* old_screen = NULL;
 SDL_Window* screen;
 SDL_Renderer* renderer;
 
@@ -62,19 +62,36 @@ void closeGraphics(void)
 	SDL_Quit();
 }
 
-/// displays a VFB (virtual frame buffer) to the real framebuffer, with the necessary color clipping
-//void displayVFB(Color vfb[VFB_MAX_SIZE][VFB_MAX_SIZE])
-//{
-//	int rs = screen->format->Rshift;
-//	int gs = screen->format->Gshift;
-//	int bs = screen->format->Bshift;
-//	for (int y = 0; y < screen->h; y++) {
-//		Uint32 *row = (Uint32*) ((Uint8*) screen->pixels + y * screen->pitch);
-//		for (int x = 0; x < screen->w; x++)
-//			row[x] = vfb[y][x].toRGB32(rs, gs, bs);
-//	}
-//	SDL_Flip(screen);
-//}
+ //displays a VFB (virtual frame buffer) to the real framebuffer, with the necessary color clipping
+void displayVFB(Color vfb[VFB_MAX_SIZE][VFB_MAX_SIZE])
+{
+	SDL_Surface* old_screen = SDL_CreateRGBSurface(0, 640, 480, 32,
+		0x00FF0000,
+		0x0000FF00,
+		0x000000FF,
+		0xFF000000);
+
+	int rs = old_screen->format->Rshift;
+	int gs = old_screen->format->Gshift;
+	int bs = old_screen->format->Bshift;
+	for (int y = 0; y < old_screen->h; y++) {
+		Uint32 *row = (Uint32*) ((Uint8*)old_screen->pixels + y * old_screen->pitch);
+		for (int x = 0; x < old_screen->w; x++)
+			row[x] = vfb[y][x].toRGB32(rs, gs, bs);
+	}
+
+	SDL_Texture* sdlTexture = SDL_CreateTexture(renderer,
+		SDL_PIXELFORMAT_ARGB8888,
+		SDL_TEXTUREACCESS_STREAMING,
+		640, 480);
+
+	SDL_UpdateTexture(sdlTexture, NULL, old_screen->pixels, old_screen->pitch);
+	SDL_RenderClear(renderer);
+	SDL_RenderCopy(renderer, sdlTexture, NULL, NULL);
+	SDL_RenderPresent(renderer);
+
+	//SDL_Flip(old_screen);
+}
 
 void displayVFBB(Color vfb[VFB_MAX_SIZE][VFB_MAX_SIZE])
 {

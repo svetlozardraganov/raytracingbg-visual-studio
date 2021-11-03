@@ -76,7 +76,7 @@ void initializeScene(void)
 
 	lightPos = Vector(0, 300, 750);
 	lightColor = Color(1, 1, 1);
-	lightPower = 80000;
+	lightPower = 50000;
 
 	Plane* plane = new Plane(2);
 	geometries.push_back(plane);
@@ -127,8 +127,8 @@ int main(int argc, char** argv)
 	if (!initGraphics(RESX, RESY)) return -1;
 	initializeScene();
 	renderScene();
-	//displayVFB(vfb);
-	displayVFBB(vfb);
+	displayVFB(vfb);
+	//displayVFBB(vfb);
 	waitForUserExit();
 	closeGraphics();
 	return 0;
